@@ -1,12 +1,59 @@
-import { publicProcedure, router } from './trpc';
-import { z } from 'zod';
+import { publicProcedure, router } from "./trpc";
+import { z } from "zod";
+import { tasks } from "./dbMock";
 
 export const appRouter = router({
-    greeting: publicProcedure
-        .input(z.object({ name: z.string().min(3, 'Name must be at least 3 characters long') }))
-        .query((opts) => {
-            return { message: `Hello, ${opts.input.name}!` };
-        })
+  addTask: publicProcedure
+    .input(
+      z.object({
+        titulo: z
+          .string()
+          .min(3, "O título da tarefa deve ter pelo menos 3 caracteres"),
+        descricao: z.string().optional(),
+      }),
+    )
+    .mutation((opts) => {
+      const newTask = {
+        id: tasks.length + 1,
+        titulo: opts.input.titulo,
+        descricao: opts.input.descricao || "",
+        dataCriacao: new Date(),
+      };
+      tasks.push(newTask);
+      console.log(tasks);
+      return { response: `Tarefa adicionada com sucesso` };
+    }),
+  listTasks: publicProcedure.query(() => {
+    return tasks;
+  }),
+  updateTask: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        titulo: z
+          .string()
+          .min(3, "O título da tarefa deve ter pelo menos 3 caracteres"),
+        descricao: z.string().optional(),
+      }),
+    )
+    .mutation((opts) => {
+      const task = tasks.find((t) => t.id === opts.input.id);
+      if (!task) {
+        throw new Error("Tarefa não encontrada");
+      }
+      task.titulo = opts.input.titulo;
+      task.descricao = opts.input.descricao || "";
+      console.log(tasks);
+      return { response: `Tarefa atualizada com sucesso` };
+    }),
+  deleteTask: publicProcedure.input(z.number()).mutation((opts) => {
+    tasks.splice(
+      tasks.findIndex((task) => task.id === opts.input),
+      1,
+    );
+    console.log(tasks);
+    return { response: "Tarefa removida com sucesso" };
+  }),
 });
 
 export type AppRouter = typeof appRouter;
