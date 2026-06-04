@@ -1,6 +1,6 @@
-import { publicProcedure, router } from "./trpc";
+import { publicProcedure, router } from "../init";
 import { z } from "zod";
-import { tasks } from "./dbMock";
+import { tasks } from "../../db/dbMock";
 
 export const appRouter = router({
   addTask: publicProcedure
