@@ -1,24 +1,25 @@
-import Image from "next/image";
 import { tasks } from "../db/dbMock";
-import { Button } from "@/components/ui/button"
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
+import { EditTaskDialog } from "../customComponents/editTaskDialog";
+import { getTRPC } from "../trpc/server";
 
-function showModal() {
+export const dynamic = "force-dynamic";
 
-}
+export default async function Home() {
+  const trpc = await getTRPC();
+  const tasks = await trpc.listTasks();
+  console.log("Tasks in Home:", tasks.map(t => ({ id: t.id, titulo: t.titulo })));
 
-export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <h1 className="font-bold text-2xl mb-4">Lista de Tarefas</h1>
-      <div className="w-200">
+      <div className="w-96">
         {tasks.map((task) =>
           <Item key={task.id} variant="outline" className="mb-2">
             <ItemContent>
@@ -28,9 +29,11 @@ export default function Home() {
               </ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Button variant="outline" size="sm" onClick={showModal}>
-                Action
-              </Button>
+              <EditTaskDialog
+                taskId={task.id}
+                initialTitulo={task.titulo}
+                initialDescricao={task.descricao}
+              />
             </ItemActions>
           </Item>
         )}
