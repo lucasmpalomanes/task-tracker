@@ -28,7 +28,7 @@ export default function Home() {
               </ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Button variant="outline" size="sm" onClick={ }>
+              <Button variant="outline" size="sm" onClick={showModal}>
                 Action
               </Button>
             </ItemActions>
