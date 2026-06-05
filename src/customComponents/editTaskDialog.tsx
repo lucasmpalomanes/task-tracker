@@ -17,15 +17,17 @@ import { Textarea } from "@/components/ui/textarea"
 import { trpc } from "../trpc/client"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { TRPCClientError } from "@trpc/client"
+import { toast } from "sonner"
 
-export function EditTaskDialog({ 
-    taskId, 
-    initialTitulo, 
-    initialDescricao 
-}: { 
-    taskId: number, 
-    initialTitulo: string, 
-    initialDescricao: string 
+export function EditTaskDialog({
+    taskId,
+    initialTitulo,
+    initialDescricao
+}: {
+    taskId: number,
+    initialTitulo: string,
+    initialDescricao: string
 }) {
     const router = useRouter()
     const [open, setOpen] = useState(false);
@@ -42,14 +44,27 @@ export function EditTaskDialog({
 
     const atualizarTarefa = async (e: React.MouseEvent) => {
         e.preventDefault()
-        await trpc.updateTask.mutate({
-            id: taskId,
-            titulo: titulo,
-            descricao: descricao
-        })
 
-        router.refresh()
-        setOpen(false) // Close the dialog
+        try {
+            await trpc.updateTask.mutate({
+                id: taskId,
+                titulo: titulo,
+                descricao: descricao
+            })
+
+            router.refresh()
+            setOpen(false) // Close the dialog
+        }
+        catch (e) {
+            if (e instanceof TRPCClientError) {
+                try {
+                    const errors = JSON.parse(e.message) as { message: string }[]
+                    toast(errors[0].message, { position: "top-center" })
+                } catch {
+                    toast(e.message, { position: "top-center" })
+                }
+            } else console.log(e)
+        }
     }
 
     return (
