@@ -58,7 +58,6 @@ export function EditTaskDialog({
         }
         catch (e) {
             // Assim como no AddTask, erros de validação Zod chegam serializados na mensagem do TRPCClientError.
-            // Não vi necessidade de revalidar o formulário no frontend visto que o Zod já o valida do lado do servidor
             if (e instanceof TRPCClientError) {
                 try {
                     const errors = JSON.parse(e.message) as { message: string }[]
