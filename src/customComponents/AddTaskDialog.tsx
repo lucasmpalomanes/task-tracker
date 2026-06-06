@@ -19,41 +19,24 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { TRPCClientError } from "@trpc/client"
 import { toast } from "sonner"
+import { Plus } from "lucide-react"
 
-export function EditTaskDialog({
-    taskId,
-    initialTitulo,
-    initialDescricao
-}: {
-    taskId: number,
-    initialTitulo: string,
-    initialDescricao: string
-}) {
+export function AddTaskDialog() {
     const router = useRouter()
-    const [open, setOpen] = useState(false);
-    const [titulo, setTitulo] = useState(initialTitulo);
-    const [descricao, setDescricao] = useState(initialDescricao);
+    const [titulo, setTitulo] = useState("");
+    const [descricao, setDescricao] = useState("");
 
-    const handleOpenChange = (isOpen: boolean) => {
-        setOpen(isOpen);
-        if (isOpen) {
-            setTitulo(initialTitulo);
-            setDescricao(initialDescricao);
-        }
-    };
-
-    const atualizarTarefa = async (e: React.MouseEvent) => {
+    const adicionarTarefa = async (e: React.MouseEvent) => {
         e.preventDefault()
 
         try {
-            await trpc.updateTask.mutate({
-                id: taskId,
+            await trpc.addTask.mutate({
                 titulo: titulo,
                 descricao: descricao
             })
 
             router.refresh()
-            setOpen(false)
+            //setOpen(false)
         }
         catch (e) {
             if (e instanceof TRPCClientError) {
@@ -68,14 +51,17 @@ export function EditTaskDialog({
     }
 
     return (
-        <Dialog open={open} onOpenChange={handleOpenChange}>
+        <Dialog>
             <form>
                 <DialogTrigger asChild>
-                    <Button variant="outline">Editar tarefa</Button>
+                    <Button variant="outline">
+                        <Plus/>
+                        Adicionar tarefa
+                    </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-sm">
                     <DialogHeader>
-                        <DialogTitle>Editar tarefa</DialogTitle>
+                        <DialogTitle>Adicionar tarefa</DialogTitle>
                         <DialogDescription>
                             Faça alterações na tarefa abaixo:
                         </DialogDescription>
@@ -94,7 +80,7 @@ export function EditTaskDialog({
                         <DialogClose asChild>
                             <Button variant="outline">Cancelar</Button>
                         </DialogClose>
-                        <Button type="submit" onClick={atualizarTarefa}>Salvar alterações</Button>
+                        <Button type="submit" onClick={adicionarTarefa}>Salvar alterações</Button>
                     </DialogFooter>
                 </DialogContent>
             </form>

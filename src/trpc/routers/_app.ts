@@ -1,6 +1,7 @@
 import { publicProcedure, router } from "../init";
 import { z } from "zod";
 import { tasks } from "../../db/dbMock";
+import { TRPCError } from "@trpc/server";
 
 export const appRouter = router({
   addTask: publicProcedure
@@ -32,14 +33,14 @@ export const appRouter = router({
         id: z.number(),
         titulo: z
           .string()
-          .min(3, "O título da tarefa deve ter pelo menos 3 caracteres"),
+          .min(1, "O título da tarefa é obrigatório"),
         descricao: z.string().optional(),
       }),
     )
     .mutation((opts) => {
       const task = tasks.find((t) => t.id === opts.input.id);
       if (!task) {
-        throw new Error("Tarefa não encontrada");
+        throw new TRPCError({ code: "NOT_FOUND", message: "Tarefa não encontrada" });
       }
       task.titulo = opts.input.titulo;
       task.descricao = opts.input.descricao || "";
