@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Tracker
 
-## Getting Started
+Aplicação web para gerenciar uma lista de tarefas, com título e descrição.
 
-First, run the development server:
+## Como funciona
+
+O sistema é construído com **Next.js** (App Router) e **tRPC** para a camada de API.
+
+- **Página principal** (`src/app/page.tsx`): Server Component que busca e exibe todas as tarefas.
+- **API tRPC** (`src/trpc/routers/_app.ts`): expõe quatro operações — listar, adicionar, editar e remover tarefas. A validação dos dados é feita com Zod.
+- **Persistência**: as tarefas ficam em memória (`src/db/dbMock.ts`), compartilhadas via `globalThis` durante a execução do servidor. Os dados são reiniciados ao reiniciar o processo.
+- **Componentes de interface** (`src/customComponents/`): diálogos e botões (client components) que chamam a API tRPC e atualizam a página com `router.refresh()`.
+- **UI**: componentes [shadcn/ui](https://ui.shadcn.com) sobre Radix UI e Tailwind CSS.
+
+Fluxo resumido: a listagem é renderizada no servidor; ações do usuário (criar, editar, excluir) são enviadas ao endpoint `/api/trpc` e, após sucesso, a página é recarregada para refletir o estado atual.
+
+## Pré-requisitos
+
+- Node.js 20+
+- npm, yarn, pnpm ou bun
+
+## Como executar
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Inicie o servidor de desenvolvimento:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Outros comandos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Comando        | Descrição                          |
+|----------------|------------------------------------|
+| `npm run build`| Gera a build de produção           |
+| `npm run start`| Sobe o servidor em modo produção   |
+| `npm run lint` | Executa o ESLint                   |
