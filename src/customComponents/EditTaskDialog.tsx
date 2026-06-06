@@ -84,10 +84,11 @@ export function EditTaskDialog({
                         </DialogDescription>
                     </DialogHeader>
                     <FieldGroup>
-                        <Field className="mb-3">
+                        <Field>
                             <Label htmlFor="titulo-1">Título</Label>
                             <Input id="titulo-1" name="titulo" placeholder="Título da tarefa" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
                         </Field>
+                        {titulo.trim().length === 0 ? <p className="text-sm text-destructive">O título da tarefa é obrigatório</p> : null}
                         <Field>
                             <Label htmlFor="descricao-1">Descrição</Label>
                             <Textarea id="descricao-1" name="descricao" placeholder="Descrição aqui..." value={descricao} onChange={(e) => setDescricao(e.target.value)} />
@@ -97,7 +98,7 @@ export function EditTaskDialog({
                         <DialogClose asChild>
                             <Button variant="outline">Cancelar</Button>
                         </DialogClose>
-                        <Button type="submit" onClick={atualizarTarefa}>Salvar alterações</Button>
+                        <Button type="submit" disabled={titulo.trim().length === 0} onClick={atualizarTarefa}>Salvar alterações</Button>
                     </DialogFooter>
                 </DialogContent>
             </form>

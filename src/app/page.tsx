@@ -3,6 +3,7 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
+  ItemFooter,
   ItemTitle,
 } from "@/components/ui/item";
 import { EditTaskDialog } from "../customComponents/EditTaskDialog";
@@ -35,6 +36,9 @@ export default async function Home() {
               <ItemDescription className="line-clamp-none whitespace-normal wrap-break-word">
                 {task.descricao || "Sem descrição"}
               </ItemDescription>
+              <ItemFooter>
+                Criada em {task.dataCriacao.toLocaleDateString()}
+              </ItemFooter>
             </ItemContent>
             <ItemActions>
               <RemoveTaskButton taskId={task.id}/>
