@@ -9,16 +9,10 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
   };
 };
 
-/**
- * Initialization of tRPC backend
- * Should be done only once per backend!
- */
+// Instância única do tRPC — reutilizada por todos os routers e procedures.
 const t = initTRPC.context<Awaited<ReturnType<typeof createTRPCContext>>>().create();
 
-/**
- * Export reusable router and procedure helpers
- * that can be used throughout the router
- */
+// publicProcedure: sem autenticação, adequado para este protótipo sem login.
 export const router = t.router;
 export const publicProcedure = t.procedure;
 export const createCallerFactory = t.createCallerFactory;

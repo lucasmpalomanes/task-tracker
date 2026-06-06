@@ -5,8 +5,9 @@ import { headers } from 'next/headers';
 const createCaller = createCallerFactory(appRouter);
 
 /**
- * Helper to get a type-safe tRPC caller on the server.
- * This is used inside Server Components, Server Actions, and Route Handlers.
+ * Caller tRPC para o servidor.
+ * Usado em Server Components para chamar procedures diretamente,
+ * sem passar pelo endpoint HTTP /api/trpc.
  */
 export const getTRPC = async () => {
   const heads = await headers();

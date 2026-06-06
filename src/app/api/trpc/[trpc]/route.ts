@@ -2,6 +2,7 @@ import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { createTRPCContext } from '@/src/trpc/init';
 import { appRouter } from '@/src/trpc/routers/_app';
 
+// Ponte HTTP entre o cliente tRPC (browser) e o appRouter (servidor).
 const handler = (req: Request) =>
     fetchRequestHandler({
         endpoint: '/api/trpc',
