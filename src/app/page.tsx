@@ -23,8 +23,8 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <h1 className="font-bold text-2xl mb-4">Lista de Tarefas</h1>
-      <div className="max-w-lg">
+      <h1 className="font-bold text-2xl mb-4 mt-4">Lista de Tarefas</h1>
+      <div className="w-lg">
         {tasks.map((task) => (
           <Item key={task.id} variant="outline" className="mb-2">
             <ItemContent>

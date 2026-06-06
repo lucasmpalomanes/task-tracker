@@ -9,7 +9,7 @@ export const appRouter = router({
       z.object({
         titulo: z
           .string()
-          .min(3, "O título da tarefa deve ter pelo menos 3 caracteres"),
+          .min(1, "O título da tarefa é obrigatório"),
         descricao: z.string().optional(),
       }),
     )

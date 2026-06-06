@@ -25,6 +25,15 @@ export function AddTaskDialog() {
     const router = useRouter()
     const [titulo, setTitulo] = useState("");
     const [descricao, setDescricao] = useState("");
+    const [open, setOpen] = useState(false);
+
+    const handleOpenChange = (isOpen: boolean) => {
+        setOpen(isOpen);
+        if (isOpen) {
+            setTitulo("");
+            setDescricao("");
+        }
+    };
 
     const adicionarTarefa = async (e: React.MouseEvent) => {
         e.preventDefault()
@@ -36,7 +45,7 @@ export function AddTaskDialog() {
             })
 
             router.refresh()
-            //setOpen(false)
+            setOpen(false)
         }
         catch (e) {
             if (e instanceof TRPCClientError) {
@@ -51,10 +60,10 @@ export function AddTaskDialog() {
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
             <form>
                 <DialogTrigger asChild>
-                    <Button variant="outline">
+                    <Button variant="outline" className="mb-2">
                         <Plus/>
                         Adicionar tarefa
                     </Button>
