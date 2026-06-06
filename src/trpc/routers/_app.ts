@@ -16,9 +16,9 @@ export const appRouter = router({
       }),
     )
     .mutation((opts) => {
-      // ID sequencial simples — suficiente para o mock em memória.
+      // Maior ID existente + 1 — evita colisão após remoções no meio da lista.
       const newTask = {
-        id: tasks.length + 1,
+        id: Math.max(0, ...tasks.map((t) => t.id)) + 1,
         titulo: opts.input.titulo,
         descricao: opts.input.descricao || "",
         dataCriacao: new Date(),
