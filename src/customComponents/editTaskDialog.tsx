@@ -34,6 +34,7 @@ export function EditTaskDialog({
     const [titulo, setTitulo] = useState(initialTitulo);
     const [descricao, setDescricao] = useState(initialDescricao);
 
+    // Reseta o formulário com os dados atuais da tarefa a cada abertura do diálogo.
     const handleOpenChange = (isOpen: boolean) => {
         setOpen(isOpen);
         if (isOpen) {
@@ -56,6 +57,8 @@ export function EditTaskDialog({
             setOpen(false)
         }
         catch (e) {
+            // Assim como no AddTask, erros de validação Zod chegam serializados na mensagem do TRPCClientError.
+            // Não vi necessidade de revalidar o formulário no frontend visto que o Zod já o valida do lado do servidor
             if (e instanceof TRPCClientError) {
                 try {
                     const errors = JSON.parse(e.message) as { message: string }[]

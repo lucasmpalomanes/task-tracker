@@ -1,4 +1,7 @@
 "use client"
+
+// Ação destrutiva isolada em componente próprio para manter page.tsx como Server Component.
+
 import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { trpc } from "../trpc/client"

@@ -1,3 +1,5 @@
+// Mock de banco em memória 
+
 export interface Task {
   id: number;
   titulo: string;
@@ -5,6 +7,8 @@ export interface Task {
   dataCriacao: Date;
 }
 
+// globalThis garante uma única instância do array entre hot reloads (dev)
+// e entre imports do módulo no mesmo processo.
 const globalForDb = globalThis as unknown as {
   tasks: Task[] | undefined;
 };

@@ -1,4 +1,8 @@
 "use client"
+
+// Client Component: precisa de estado local (formulário) e eventos de clique.
+// Após mutação, router.refresh() revalida o Server Component pai sem recarregar a página.
+
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -27,6 +31,7 @@ export function AddTaskDialog() {
     const [descricao, setDescricao] = useState("");
     const [open, setOpen] = useState(false);
 
+    // Limpa o formulário ao abrir, para não reaproveitar dados de uma submissão anterior.
     const handleOpenChange = (isOpen: boolean) => {
         setOpen(isOpen);
         if (isOpen) {
@@ -48,6 +53,8 @@ export function AddTaskDialog() {
             setOpen(false)
         }
         catch (e) {
+            // Erros de validação Zod chegam serializados na mensagem do TRPCClientError.
+            // Não vi necessidade de revalidar o formulário no frontend visto que o Zod já o valida do lado do servidor
             if (e instanceof TRPCClientError) {
                 try {
                     const errors = JSON.parse(e.message) as { message: string }[]

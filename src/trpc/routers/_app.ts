@@ -3,6 +3,8 @@ import { z } from "zod";
 import { tasks } from "../../db/dbMock";
 import { TRPCError } from "@trpc/server";
 
+// Router central da API: queries para leitura, mutations para escrita.
+// Zod valida os inputs na borda da API; erros chegam ao cliente como TRPCClientError.
 export const appRouter = router({
   addTask: publicProcedure
     .input(
@@ -14,6 +16,7 @@ export const appRouter = router({
       }),
     )
     .mutation((opts) => {
+      // ID sequencial simples — suficiente para o mock em memória.
       const newTask = {
         id: tasks.length + 1,
         titulo: opts.input.titulo,
@@ -57,4 +60,5 @@ export const appRouter = router({
   }),
 });
 
+// Exportado para tipar o cliente tRPC de ponta a ponta (sem duplicar tipos).
 export type AppRouter = typeof appRouter;

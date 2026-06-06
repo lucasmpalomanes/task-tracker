@@ -1,4 +1,3 @@
-import { tasks } from "../db/dbMock";
 import {
   Item,
   ItemActions,
@@ -11,9 +10,13 @@ import { getTRPC } from "../trpc/server";
 import { RemoveTaskButton } from "../customComponents/RemoveTaskButton";
 import { AddTaskDialog } from "../customComponents/AddTaskDialog"
 
+// Desabilita cache estático: as tarefas vivem em memória e mudam a cada mutação.
 export const dynamic = "force-dynamic";
 
+// Server Component — busca os dados no servidor e renderiza HTML pronto.
+// Ações interativas (adicionar/editar/remover) ficam em Client Components filhos.
 export default async function Home() {
+  // Caller tRPC no servidor: chama o router diretamente, sem HTTP interno.
   const trpc = await getTRPC();
   const tasks = await trpc.listTasks();
   console.log(
